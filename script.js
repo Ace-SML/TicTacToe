@@ -55,6 +55,7 @@ function checkWinner() {
     }
     if (cellA === cellB && cellB === cellC) {
       roundWon = true;
+      previousWinner = currentPlayer;
       break;
     }
   }
@@ -63,9 +64,22 @@ function checkWinner() {
     running = false;
   } else if (!options.includes("")) {
     statusText.textContent = `It's a Draw!`;
+    previousWinner = null;
     running = false;
   } else {
     changePlayer();
   }
 }
-function restartGame() {}
+function restartGame() {
+  options = ["", "", "", "", "", "", "", "", ""];
+  statusText.textContent = `${currentPlayer}'s turn`;
+  cells.forEach((cell) => (cell.textContent = ""));
+  if (previousWinner) {
+    // Start with the previous winner
+    currentPlayer = previousWinner;
+  } else {
+    // Alternate players if the last game was a draw
+    currentPlayer = currentPlayer === "X" ? "O" : "X";
+  }
+  running = true;
+}
